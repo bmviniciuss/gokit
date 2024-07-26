@@ -1,6 +1,8 @@
 package web
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -33,4 +35,28 @@ func Decode(r *http.Request, d Decoder) error {
 	}
 
 	return nil
+}
+
+func DecodeJSONErrorToResponse(reqID string, err error) Error {
+	if err == nil {
+		return NewInternalServerErrorResponse(reqID)
+	}
+	var syntaxError *json.SyntaxError
+	if errors.As(err, &syntaxError) {
+		return NewBadRequestErrorResponse(reqID, NewFieldsError("body", "Invalid body"))
+	}
+	if errors.Is(err, io.ErrUnexpectedEOF) {
+		return NewBadRequestErrorResponse(reqID, NewFieldsError("body", "Invalid body"))
+	}
+	var unmarshalTypeError *json.UnmarshalTypeError
+	if errors.As(err, &unmarshalTypeError) {
+		return NewBadRequestErrorResponse(reqID, NewFieldsError(
+			unmarshalTypeError.Field,
+			"Invalid value type for field",
+		))
+	}
+	if errors.Is(err, io.EOF) {
+		return NewBadRequestErrorResponse(reqID, NewFieldsError("body", "Empty body"))
+	}
+	return NewInternalServerErrorResponse(reqID)
 }
