@@ -3,8 +3,8 @@ package web
 import "net/http"
 
 // 400
-func NewBadRequestErrorResponse(requestID string, details FieldErrors) Error {
-	return Error{
+func NewBadRequestErrorResponse(requestID string, details FieldErrors) ErrorResponse {
+	return ErrorResponse{
 		ID:     requestID,
 		Status: http.StatusBadRequest,
 		Err: ErrorDetail{
@@ -16,8 +16,8 @@ func NewBadRequestErrorResponse(requestID string, details FieldErrors) Error {
 }
 
 // 404
-func NewNotFoundErrorResponse(requestID string) Error {
-	return Error{
+func NewNotFoundErrorResponse(requestID string) ErrorResponse {
+	return ErrorResponse{
 		ID:     requestID,
 		Status: http.StatusNotFound,
 		Err: ErrorDetail{
@@ -28,8 +28,8 @@ func NewNotFoundErrorResponse(requestID string) Error {
 }
 
 // 422
-func NewUnprocessableEntityResponse(id string, code string) Error {
-	return Error{
+func NewUnprocessableEntityResponse(id string, code string) ErrorResponse {
+	return ErrorResponse{
 		ID:     id,
 		Status: http.StatusUnprocessableEntity,
 		Err: ErrorDetail{
@@ -40,8 +40,8 @@ func NewUnprocessableEntityResponse(id string, code string) Error {
 }
 
 // 500
-func NewInternalServerErrorResponse(id string) Error {
-	return Error{
+func NewInternalServerErrorResponse(id string) ErrorResponse {
+	return ErrorResponse{
 		ID:     id,
 		Status: http.StatusInternalServerError,
 		Err: ErrorDetail{

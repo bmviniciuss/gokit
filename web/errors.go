@@ -5,7 +5,7 @@ import (
 	"errors"
 )
 
-type Error struct {
+type ErrorResponse struct {
 	Status int         `json:"-"`
 	ID     string      `json:"id"`
 	Err    ErrorDetail `json:"error"`

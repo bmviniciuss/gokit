@@ -37,7 +37,7 @@ func Decode(r *http.Request, d Decoder) error {
 	return nil
 }
 
-func DecodeJSONErrorToResponse(reqID string, err error) Error {
+func DecodeJSONErrorToResponse(reqID string, err error) ErrorResponse {
 	if err == nil {
 		return NewInternalServerErrorResponse(reqID)
 	}
